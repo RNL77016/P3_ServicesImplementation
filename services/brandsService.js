@@ -20,7 +20,7 @@ class brandsService {
     }
   }
 
-  create(data){
+  async create(data){
     const newBrand = {
       id: this.brands.length + 1,
       ...data
@@ -29,15 +29,15 @@ class brandsService {
     return newBrand;
   }
 
-  getAll(){
+  async getAll(){
     return this.brands;
   }
 
-  getById(id){
+  async getById(id){
     return this.brands.find(item => item.id == id);
   }
 
-  update(id, changes){
+  async update(id, changes){
     const index = this.brands.findIndex(item => item.id == id);
     if (index === -1) {
       throw new Error('Brand Not Found');
@@ -50,7 +50,7 @@ class brandsService {
     return this.brands[index];
   }
 
-  delete(id){
+  async delete(id){
     const index = this.brands.findIndex(item => item.id == id);
     if (index === -1) {
       throw new Error('Brand Not Found');

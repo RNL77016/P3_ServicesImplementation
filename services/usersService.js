@@ -20,7 +20,7 @@ class usersService {
     }
   }
 
-  create(data){
+  async create(data){
     const newUser = {
       id: this.users.length + 1,
       ...data
@@ -29,15 +29,15 @@ class usersService {
     return newUser;
   }
 
-  getAll(){
+  async getAll(){
     return this.users;
   }
 
-  getById(id){
+  async getById(id){
     return this.users.find(item => item.id == id);
   }
 
-  update(id, changes){
+  async update(id, changes){
     const index = this.users.findIndex(item => item.id == id);
     if (index === -1) {
       throw new Error('User Not Found');
@@ -50,7 +50,7 @@ class usersService {
     return this.users[index];
   }
 
-  delete(id){
+  async delete(id){
     const index = this.users.findIndex(item => item.id == id);
     if (index === -1) {
       throw new Error('User Not Found');

@@ -2,7 +2,12 @@ const express = require('express');
 const routerApi = require('./routes/rutas');
 const app = express ();
 const port = 3000;
+const setupSwagger = require ('./swagger');
+const { logErrors, errorHandler} = require ('./middlewares/errorHandler');
 
+app.use(logErrors);
+app.use(errorHandler);
+setupSwagger(app);
 app.use(express.json());
 
 app.get('/', (req, res) => {

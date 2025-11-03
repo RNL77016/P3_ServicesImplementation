@@ -20,7 +20,7 @@ class categoriesService {
     }
   }
 
-  create(data){
+  async create(data){
     const newCategory = {
       id: this.categories.length + 1,
       ...data
@@ -29,15 +29,15 @@ class categoriesService {
     return newCategory;
   }
 
-  getAll(){
+  async getAll(){
     return this.categories;
   }
 
-  getById(id){
+  async getById(id){
     return this.categories.find(item => item.id == id);
   }
 
-  update(id, changes){
+  async update(id, changes){
     const index = this.categories.findIndex(item => item.id == id);
     if (index === -1) {
       throw new Error('Category Not Found');
@@ -50,7 +50,7 @@ class categoriesService {
     return this.categories[index];
   }
 
-  delete(id){
+  async delete(id){
     const index = this.categories.findIndex(item => item.id == id);
     if (index === -1) {
       throw new Error('Category Not Found');
@@ -61,3 +61,10 @@ class categoriesService {
 }
 
 module.exports = categoriesService;
+
+
+
+
+
+
+

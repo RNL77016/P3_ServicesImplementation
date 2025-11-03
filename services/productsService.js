@@ -24,7 +24,7 @@ class productsService {
     }
   }
 
-  create(data){
+  async create(data){
     const newProduct = {
       id: this.products.length + 1,
       ...data
@@ -33,28 +33,34 @@ class productsService {
     return newProduct;
   }
 
-  getAll(){
-    return this.products;
+  async getAll(){
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(this.products);
+      }, 1000);
+    })
   }
 
-  getById(id){
+ 
+  async getById(id){
     return this.products.find(item => item.id == id);
   }
 
-  update(id, changes){
+
+  async update(id, changes){
     const index = this.products.findIndex(item => item.id == id);
     if (index === -1) {
       throw new Error('Product Not Found');
     }
     const product = this.products[index];
     this.products[index] = {
-      ...product, //Con esto mantenemos las propiedades del producto
-      ...changes // y asi no se borra todo, solo se cambia la propiedad actualizada
+      ...product, 
+      ...changes 
     };
     return this.products[index];
   }
 
-  delete(id){
+  async delete(id){
     const index = this.products.findIndex(item => item.id == id);
     if (index === -1) {
       throw new Error('Product Not Found');
@@ -66,5 +72,24 @@ class productsService {
 
 module.exports = productsService;
 
+/*
+1. Procesar Solicitudes. Permiten manipular las solicitudes de entrada antes de que 
+   lleguen a los manejadores de rutas.
 
+2. Respuesta: Pueden modificar las respuestas antes de que envien de vuelta al cliente.
+
+3. Encadenar tareas: Permiten encadenar una serie de funciones que se ejeuctan en
+   orden, cada una de las cuales puede realizar una tearea específica.
+
+4. Control de flujo: Permite determinar si se debe continuar con el siguiente 
+   middleware o manejador de ruta, o si se debe cortar la cadena de middlewares.
+
+function (req, res, next) {
+  if (something){
+  res.send('end);
+  } else {
+    next();
+  }
+} 
+*/
 
