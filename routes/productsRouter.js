@@ -10,6 +10,8 @@ const brands = brandsService;
  * /products:
  *   get:
  *     summary: Obtener una lista de productos
+ *     tags:
+ *       - products
  *     responses:
  *       '200':
  *         description: Lista de Productos
@@ -47,6 +49,8 @@ router.get('/', async (req, res) => {
  * /products/{id}:
  *   get:
  *     summary: Obtiene un producto por ID
+ *     tags:
+ *       - products
  *     parameters:
  *       - in: path
  *         name: id
@@ -94,6 +98,8 @@ router.get('/:id', async (req, res, next) => {
  * /products:
  *   post:
  *     summary: Crea un nuevo producto
+ *     tags:
+ *       - products
  *     requestBody:
  *       required: true
  *       content:
@@ -125,11 +131,11 @@ router.post('/', async (req, res, next) => {
         // Validar que categoryId y brandId existan
         if (body.categoryId) {
             const cat = await categories.getById(body.categoryId);
-            if (!cat) return res.status(400).json({ message: 'Category not found' });
+            if (!cat) return res.status(400).json({ message: 'Category no encontrada' });
         }
         if (body.brandId) {
             const br = await brands.getById(body.brandId);
-            if (!br) return res.status(400).json({ message: 'Brand not found' });
+            if (!br) return res.status(400).json({ message: 'Brand no encontrada' });
         }
         const newProduct = await service.create(body);
         res.status(201).json(newProduct);
@@ -143,6 +149,8 @@ router.post('/', async (req, res, next) => {
  * /products/{id}:
  *   patch:
  *     summary: Actualiza un producto por ID
+ *     tags:
+ *       - products
  *     parameters:
  *       - in: path
  *         name: id
@@ -182,11 +190,11 @@ router.patch('/:id', async (req, res, next) => {
         // Si se actualiza categoryId o brandId, validar existencia
         if (body.categoryId) {
             const cat = await categories.getById(body.categoryId);
-            if (!cat) return res.status(400).json({ message: 'Category not found' });
+            if (!cat) return res.status(400).json({ message: 'Category no encontrada' });
         }
         if (body.brandId) {
             const br = await brands.getById(body.brandId);
-            if (!br) return res.status(400).json({ message: 'Brand not found' });
+            if (!br) return res.status(400).json({ message: 'Brand no encontrada' });
         }
         const product = await service.update(id, body);
         res.json(product);
@@ -200,6 +208,8 @@ router.patch('/:id', async (req, res, next) => {
  * /products/{id}:
  *   delete:
  *     summary: Elimina un producto por ID
+ *     tags:
+ *       - products
  *     parameters:
  *       - in: path
  *         name: id

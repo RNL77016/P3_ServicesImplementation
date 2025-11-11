@@ -1,71 +1,31 @@
-const faker = require('faker');
+const Product = require('../models/Product');
 
 class productsService {
-  constructor(){
-    this.products = [];
-    this.generate();
-    this.getById = this.getById.bind(this);
-    this.update = this.update.bind(this);
-    this.delete = this.delete.bind(this);
+  constructor() {}
+
+  async create(data) {
+    const product = new Product(data);
+    await product.save();
+    return product.toObject();
   }
 
-  generate(){
-    for (let i = 0; i < 20; i++) {
-      this.products.push({
-          id: i + 1,
-          image: faker.image.imageUrl(),
-          productName: faker.commerce.productName(),
-          description: faker.lorem.paragraph(),
-          price: parseInt(faker.commerce.price(), 10),
-          stock: faker.datatype.number({ min: 0, max: 100 }),
-          categoryId: faker.datatype.number({ min: 1, max: 5 }),
-          brandId: faker.datatype.number({ min: 1, max: 5 })
-      });
-    }
+  async getAll() {
+    return Product.find().lean();
   }
 
-  async create(data){
-    const newProduct = {
-      id: this.products.length + 1,
-      ...data
-    };
-    this.products.push(newProduct);
-    return newProduct;
+  async getById(id) {
+    return Product.findById(id).lean();
   }
 
-  async getAll(){
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.products);
-      }, 1000);
-    })
+  async update(id, changes) {
+    const updated = await Product.findByIdAndUpdate(id, changes, { new: true }).lean();
+    if (!updated) throw new Error('Product Not Found');
+    return updated;
   }
 
- 
-  async getById(id){
-    return this.products.find(item => item.id == id);
-  }
-
-
-  async update(id, changes){
-    const index = this.products.findIndex(item => item.id == id);
-    if (index === -1) {
-      throw new Error('Product Not Found');
-    }
-    const product = this.products[index];
-    this.products[index] = {
-      ...product, 
-      ...changes 
-    };
-    return this.products[index];
-  }
-
-  async delete(id){
-    const index = this.products.findIndex(item => item.id == id);
-    if (index === -1) {
-      throw new Error('Product Not Found');
-    }
-    this.products.splice(index, 1);
+  async delete(id) {
+    const deleted = await Product.findByIdAndDelete(id).lean();
+    if (!deleted) throw new Error('Product Not Found');
     return { id };
   }
 }

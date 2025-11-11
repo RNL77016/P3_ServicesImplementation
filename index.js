@@ -1,14 +1,18 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const routerApi = require('./routes/rutas');
-const app = express ();
-const port = 3000;
-const setupSwagger = require ('./swagger');
-const { logErrors, errorHandler} = require ('./middlewares/errorHandler');
+const app = express();
+const port = process.env.PORT || 3000;
+const setupSwagger = require('./swagger');
+const { logErrors, errorHandler } = require('./middlewares/errorHandler');
+const dotenv = require('dotenv');
 
+dotenv.config();
+
+app.use(express.json());
+setupSwagger(app);
 app.use(logErrors);
 app.use(errorHandler);
-setupSwagger(app);
-app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hola desde mi server en Express');
@@ -20,9 +24,17 @@ app.get('/nuevaruta', (req, res) => {
 
 routerApi(app);
 
-app.listen(port, () => {
-  console.log('Mi servidor está funcionando en : ' + port);
-});
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://ronisnl:Domelipa321@cluster25712.ga2ds9j.mongodb.net/?retryWrites=true&w=majority&appName=cluster25712';
+
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => {
+    console.log('Conexion a MongoDB exitosa');
+    app.listen(port, () => {
+      console.log('Mi servidor está funcionando en : ' + port);
+    });
+  })
+  .catch((err) => console.error('No se puede conectar a MongoDB:', err));
 
 // app.get('/categories/:categoryId/products/:productId', (req, res) => {
 //     const {categoryId, productId} = req.params;

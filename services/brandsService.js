@@ -1,61 +1,31 @@
-const faker = require('faker');
+const Brand = require('../models/Brand');
 
 class brandsService {
-  constructor(){
-    this.brands = [];
-    this.generate();
-    this.getById = this.getById.bind(this);
-    this.update = this.update.bind(this);
-    this.delete = this.delete.bind(this);
+  constructor() {}
+
+  async create(data) {
+    const brand = new Brand(data);
+    await brand.save();
+    return brand.toObject();
   }
 
-  generate(){
-    for (let i = 0; i < 20; i++) {
-      this.brands.push({
-          id: i + 1,
-          brandName: faker.company.companyName(),
-          description: faker.lorem.paragraph(),
-          active: faker.datatype.boolean()
-      });
-    }
+  async getAll() {
+    return Brand.find().lean();
   }
 
-  async create(data){
-    const newBrand = {
-      id: this.brands.length + 1,
-      ...data
-    };
-    this.brands.push(newBrand);
-    return newBrand;
+  async getById(id) {
+    return Brand.findById(id).lean();
   }
 
-  async getAll(){
-    return this.brands;
+  async update(id, changes) {
+    const updated = await Brand.findByIdAndUpdate(id, changes, { new: true }).lean();
+    if (!updated) throw new Error('Brand Not Found');
+    return updated;
   }
 
-  async getById(id){
-    return this.brands.find(item => item.id == id);
-  }
-
-  async update(id, changes){
-    const index = this.brands.findIndex(item => item.id == id);
-    if (index === -1) {
-      throw new Error('Brand Not Found');
-    }
-    const brand = this.brands[index];
-    this.brands[index] = {
-      ...brand,
-      ...changes
-    };
-    return this.brands[index];
-  }
-
-  async delete(id){
-    const index = this.brands.findIndex(item => item.id == id);
-    if (index === -1) {
-      throw new Error('Brand Not Found');
-    }
-    this.brands.splice(index, 1);
+  async delete(id) {
+    const deleted = await Brand.findByIdAndDelete(id).lean();
+    if (!deleted) throw new Error('Brand Not Found');
     return { id };
   }
 }

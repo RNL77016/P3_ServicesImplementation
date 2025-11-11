@@ -8,6 +8,8 @@ const service = usersService;
  * /users:
  *   get:
  *     summary: Obtener una lista de usuarios
+ *     tags:
+ *       - users
  *     responses:
  *       '200':
  *         description: Lista de Usuarios
@@ -37,6 +39,8 @@ router.get('/', async (req, res) => {
  * /users/{id}:
  *   get:
  *     summary: Obtiene un usuario por ID
+ *     tags:
+ *       - users
  *     parameters:
  *       - in: path
  *         name: id
@@ -76,6 +80,8 @@ router.get('/:id', async (req, res, next) => {
  * /users:
  *   post:
  *     summary: Crea un nuevo usuario
+ *     tags:
+ *       - users
  *     requestBody:
  *       required: true
  *       content:
@@ -104,6 +110,8 @@ router.post('/', async (req, res) => {
  * /users/{id}:
  *   patch:
  *     summary: Actualiza un usuario por ID
+ *     tags:
+ *       - users
  *     parameters:
  *       - in: path
  *         name: id
@@ -140,6 +148,8 @@ router.patch('/:id', async (req, res, next) => {
  * /users/{id}:
  *   delete:
  *     summary: Elimina un usuario por ID
+ *     tags:
+ *       - users
  *     parameters:
  *       - in: path
  *         name: id

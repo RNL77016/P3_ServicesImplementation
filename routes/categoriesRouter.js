@@ -9,6 +9,8 @@ const products = productsService;
  * /categories:
  *   get:
  *     summary: Obtener una lista de categorías
+ *     tags:
+ *       - categories
  *     responses:
  *       '200':
  *         description: Lista de Categorías
@@ -38,6 +40,8 @@ router.get('/', async (req, res) => {
  * /categories/{id}:
  *   get:
  *     summary: Obtiene una categoría por ID
+ *     tags:
+ *       - categories
  *     parameters:
  *       - in: path
  *         name: id
@@ -77,6 +81,8 @@ router.get('/:id', async (req, res, next) => {
  * /categories:
  *   post:
  *     summary: Crea una nueva categoría
+ *     tags:
+ *       - categories
  *     requestBody:
  *       required: true
  *       content:
@@ -105,6 +111,8 @@ router.post('/', async (req, res) => {
  * /categories/{id}:
  *   patch:
  *     summary: Actualiza una categoría por ID
+ *     tags:
+ *       - categories
  *     parameters:
  *       - in: path
  *         name: id
@@ -141,6 +149,8 @@ router.patch('/:id', async (req, res, next) => {
  * /categories/{id}:
  *   delete:
  *     summary: Elimina una categoría por ID
+ *     tags:
+ *       - categories
  *     parameters:
  *       - in: path
  *         name: id
@@ -157,7 +167,7 @@ router.delete('/:id', async (req, res, next) => {
         const { id } = req.params;
         const allProducts = await products.getAll();
         const inUse = allProducts.some(p => p.categoryId == id);
-        if (inUse) return res.status(400).json({ message: 'Cannot delete category: there are products referencing it' });
+        if (inUse) return res.status(400).json({ message: 'No se puede eliminar la categoría: hay productos que la referencian' });
         const respuesta = await service.delete(id);
         res.json(respuesta);
     } catch (error) {

@@ -1,61 +1,31 @@
-const faker = require('faker');
+const Category = require('../models/Category');
 
 class categoriesService {
-  constructor(){
-    this.categories = [];
-    this.generate();
-    this.getById = this.getById.bind(this);
-    this.update = this.update.bind(this);
-    this.delete = this.delete.bind(this);
+  constructor() {}
+
+  async create(data) {
+    const category = new Category(data);
+    await category.save();
+    return category.toObject();
   }
 
-  generate(){
-    for (let i = 0; i < 20; i++) {
-      this.categories.push({
-          id: i + 1,
-          categoryName: faker.commerce.department(),
-          description: faker.lorem.paragraph(),
-          active: faker.datatype.boolean()
-      });
-    }
+  async getAll() {
+    return Category.find().lean();
   }
 
-  async create(data){
-    const newCategory = {
-      id: this.categories.length + 1,
-      ...data
-    };
-    this.categories.push(newCategory);
-    return newCategory;
+  async getById(id) {
+    return Category.findById(id).lean();
   }
 
-  async getAll(){
-    return this.categories;
+  async update(id, changes) {
+    const updated = await Category.findByIdAndUpdate(id, changes, { new: true }).lean();
+    if (!updated) throw new Error('Category Not Found');
+    return updated;
   }
 
-  async getById(id){
-    return this.categories.find(item => item.id == id);
-  }
-
-  async update(id, changes){
-    const index = this.categories.findIndex(item => item.id == id);
-    if (index === -1) {
-      throw new Error('Category Not Found');
-    }
-    const category = this.categories[index];
-    this.categories[index] = {
-      ...category,
-      ...changes
-    };
-    return this.categories[index];
-  }
-
-  async delete(id){
-    const index = this.categories.findIndex(item => item.id == id);
-    if (index === -1) {
-      throw new Error('Category Not Found');
-    }
-    this.categories.splice(index, 1);
+  async delete(id) {
+    const deleted = await Category.findByIdAndDelete(id).lean();
+    if (!deleted) throw new Error('Category Not Found');
     return { id };
   }
 }

@@ -9,6 +9,8 @@ const products = productsService;
  * /brands:
  *   get:
  *     summary: Obtener todas las marcas
+ *     tags:
+ *       - brands
  *     responses:
  *       '200':
  *         description: Lista de marcas
@@ -36,6 +38,8 @@ router.get('/', async (req, res) => {
  * /brands/{id}:
  *   get:
  *     summary: Obtener una marca por id
+ *     tags:
+ *       - brands
  *     parameters:
  *       - in: path
  *         name: id
@@ -72,6 +76,8 @@ router.get('/:id', async (req, res, next) => {
  * /brands:
  *   post:
  *     summary: Crea una nueva marca
+ *     tags:
+ *       - brands
  *     requestBody:
  *       required: true
  *       content:
@@ -100,6 +106,8 @@ router.post('/', async (req, res) => {
  * /brands/{id}:
  *   patch:
  *     summary: Actualiza una marca por id
+ *     tags:
+ *       - brands
  *     parameters:
  *       - in: path
  *         name: id
@@ -135,6 +143,8 @@ router.patch('/:id', async (req, res) => {
  * /brands/{id}:
  *   delete:
  *     summary: Elimina una marca por id
+ *     tags:
+ *       - brands
  *     parameters:
  *       - in: path
  *         name: id
@@ -150,7 +160,7 @@ router.delete('/:id', async (req, res, next) => {
         const { id } = req.params;
         const allProducts = await products.getAll();
         const inUse = allProducts.some(p => p.brandId == id);
-        if (inUse) return res.status(400).json({ message: 'Cannot delete brand: there are products referencing it' });
+        if (inUse) return res.status(400).json({ message: 'No se puede eliminar la marca: hay productos que la referencian' });
         const respuesta = await service.delete(id);
         res.json(respuesta);
     } catch (error) {
